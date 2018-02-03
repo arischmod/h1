@@ -4,9 +4,41 @@ namespace App\Http\Controllers;
 
 use App\Blog;
 use App\Http\Controllers\Controller;
+use Session;
 
 class BlogController extends Controller
 {
+
+
+    /**
+     * Init the app with Dummy data.
+     * by puting dummy Blog objects in Session
+     *
+     * @return Response
+     */
+    public function init()
+    {
+        $allBlogs = array();
+        $success = array_push($allBlogs, 
+            new Blog(['title' => "yesterday",'author' => "aris",'content' => "lalala"]),
+            new Blog(['title' => "today",'author' => "kasia",'content' => "kakaka"]),
+            new Blog(['title' => "tomorow",'author' => "petros",'content' => "xoxoxo"]) 
+        );
+
+        Session::put(['blogs' => $allBlogs]);
+
+        if ($success)
+            return response(array(
+                'error' => false,
+                'message' => $allBlogs,
+           ),200);
+        else 
+            return response(array(
+                'error' => true,
+                'message' =>'something was wrong during Ititialisation!',
+           ),200);
+    }
+
 
     /**
      * Show all Blogs.
@@ -14,39 +46,41 @@ class BlogController extends Controller
      * @return Response
      */
     public function all()
-    {
-            return array(
-              1 => "expertphp",
-              2 => "demo"
-            );
+    {                
+        $allBlogs = Session::get('blogs');        
+     
+
+        if ($allBlogs)
+            return response(array(
+                'error' => false,
+                'message' => $allBlogs,
+           ),200);
+        else 
+            return response(array(
+                'error' => true,
+                'message' =>'there are no Blogs yet',
+           ),200);
+
+        // $collection = collect(json_decode($json_here, true));
+        // $data = $collection->where('id', 1)->data;
+        // return json_decode(file_get_contents(public_path('blogs.json')), true);
     }
 
     /**
-     * Create new Blog.
+     * Create new Blog. 
      *
      * @return Response
      */
     public function create($title = null, $author = null, $content = null)
     {
-            return array(
-              1 => "title = ".$title,
-              2 => "author = ".$author
-            );
+        $blog = new Blog(['title' => $title,'author' => $author,'content' => $content]);
+
+        //File::put(public_path('blogs.json'),$blog->toJson());
+        
+        return $blog->save();
+        return $blog;
     }
 
-
-
-    /**
-     *  TO DELETE!!!
-     * Show all Blogs.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        return view('user.profile', ['user' => User::findOrFail($id)]);
-    }
 
 
     

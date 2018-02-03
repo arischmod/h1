@@ -14,3 +14,18 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+
+Route::get('init', 'BlogController@init');
+Route::get('blogs', 'BlogController@all');
+Route::get('newblog/{title?}/{author?}/{content?}', [
+    'as' => 'newblog', 'uses' => 'BlogController@create'
+]);
+
+
+Route::get('flush', function () {
+    return Session::flush();
+    
+});
+ 
