@@ -1,0 +1,17 @@
+for Initializing the application I used simple Composer framework commands. Specifically the "laravel new h1" command line tool which is a new feature of Laravel 5.5
+Otherwise equally easy we could use the:
+"composer create-project --prefer-dist laravel/laravel h1" command which also works for previous releases and is actually what "laravel" command sits on top
+
+
+
+sudo chmod -R 775 app/storage
+sudo chmod -R 775 bootstrap/cache
+
+php artisan serve
+
+
+php artisan make:model Blog
+
+BlogController.php
+
+Routs /api
