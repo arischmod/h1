@@ -63,7 +63,7 @@ class BlogController extends Controller
            ),200);
     }
 
-    public function blog($id = null)
+    public function blog($id)
     {                
         $allBlogs = Session::get('blogs');
         
@@ -87,27 +87,28 @@ class BlogController extends Controller
            ),200); 
     }
 
-    public function delete()
+    public function delete($id)
     {                
         $allBlogs = Session::get('blogs');
         
-        $blog = array();
+        $blogExists = false;
         foreach ($allBlogs as $key => $value) {
-            if ($value->id == 1){
-                $blog = $value;
+            if ($value->id == $id){
+                $blogExists = true;
+                unset($allBlogs[$key]);
+                session()->put('blogs', $allBlogs);
                 break;                
             }
         }
-        
-        if (!empty($blog)){
+        if ($blogExists){
             return response(array(
                 'error' => false,
-                'message' => $blog,
+                'message' => 'deleted successfully',
            ),200);
         } else
             return response(array(
                 'error' => true,
-                'message' =>'there is no Blogs with this Id!',
+                'message' =>'there is no Blog with this Id!',
            ),200); 
     }
 
@@ -124,9 +125,32 @@ class BlogController extends Controller
     }
 
 
-
-    
-
+    public function update($id, $title = null, $author = null, $content = null)
+    {                
+        $allBlogs = Session::get('blogs');
+        
+        $blogExists = false;
+        foreach ($allBlogs as $key => $value) {
+            if ($value->id == $id){
+                $blogExists = true;                
+                $value->title = $title;
+                $value->author = $author;
+                $value->content = $content;
+                Session::put('blogs', $allBlogs);
+                break;                
+            }
+        }
+        if ($blogExists){
+            return response(array(
+                'error' => false,
+                'message' => 'blog updated successfully',
+           ),200);
+        } else
+            return response(array(
+                'error' => true,
+                'message' =>'there is no Blog with this Id!',
+           ),200); 
+    }
 }
 
 /**
