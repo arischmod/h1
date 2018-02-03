@@ -9,19 +9,16 @@ use Session;
 class Blog extends Model
 { 
 	public $timestamps = false;
-	protected $fillable = ['title', 'author', 'content'];
+	protected $fillable = ['id', 'title', 'author', 'content'];
 
     public function save(array $options = [])
-	{		
+	{		 
+        if (is_null($this->id)) {
+        	Session::put('blogCount', Session::get('blogCount')+1);
+        	$this->id = Session::get('blogCount');
+        }
+
 		Session::push('blogs', $this);
-		//session()->push('blogs', $this);
-		return $this;
-		// $data = json_encode(array($this->toJson(),$this->toJson(),$this->toJson()));		
-		// return $data = $this->toJson();
-
-	 //    //File::put(public_path('blogs.json'),$data);
-
-
-	 //    return $data;
+		return $this->toJson();
     }
 }
