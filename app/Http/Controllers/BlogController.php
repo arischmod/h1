@@ -9,6 +9,22 @@ use Session;
 class BlogController extends Controller
 {
 
+    public function retrieve()
+    {                
+        $allBlogs = Session::get('blogs');
+        $objects = array();
+
+        foreach ($allBlogs as $key => $value)
+        {
+            array_push($objects, 
+                new Blog(['id' => $value->id, 'title' => $value->title,'author' => $value->author,'content' => $value->content]));
+        }
+        //array_where($objects);
+        return $objects;
+    }
+
+
+
 
     /**
      * Init the app with Dummy data.
@@ -64,7 +80,7 @@ class BlogController extends Controller
     }
 
     public function blog($id)
-    {                
+    {
         $allBlogs = Session::get('blogs');
         
         $blog = array();
@@ -88,7 +104,7 @@ class BlogController extends Controller
     }
 
     public function delete($id)
-    {                
+    {
         $allBlogs = Session::get('blogs');
         
         $blogExists = false;
@@ -126,7 +142,7 @@ class BlogController extends Controller
 
 
     public function update($id, $title = null, $author = null, $content = null)
-    {                
+    {
         $allBlogs = Session::get('blogs');
         
         $blogExists = false;

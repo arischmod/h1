@@ -15,6 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('retrieve', 'BlogController@retrieve');
 
 
 Route::get('init', 'BlogController@init');
