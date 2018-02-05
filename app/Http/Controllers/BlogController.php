@@ -153,11 +153,11 @@ class BlogController extends Controller
         $blog = Blog::create(['title'=>$title, 'author'=>$author, 'content'=>$content, 'published'=>$published, 'tags'=>$tags]);        
         
         // send email to admin
-        // Mail::raw('newBlog!!', function ($message){
-        //     $message->subject('New Blog is Created!');
-        //     $message->from('aris.stru@gmail.com', 'Blog App');
-        //     $message->to(env('MAIL_ADMIN', 'aris.stru@gmail.com'));
-        // });
+        Mail::raw('newBlog!!', function ($message){
+            $message->subject('New Blog is Created!');
+            $message->from('aris.stru@gmail.com', 'Blog App');
+            $message->to(env('MAIL_ADMIN', 'aris.stru@gmail.com'));
+        });
 
         return $blog;
         //$blog = new Blog(['title' => $title,'author' => $author,'content' => $content]);
