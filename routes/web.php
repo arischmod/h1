@@ -19,13 +19,13 @@ Route::get('retrieve', 'BlogController@retrieve');
 
 
 Route::get('init', 'BlogController@init');
-Route::get('blogs', 'BlogController@all');
+Route::get('blogs/{order?}/{published?}', 'BlogController@all');
 Route::get('blog/{id}', 'BlogController@blog');
 Route::get('delete/{id}', 'BlogController@delete');
-Route::get('update/{id}/{title?}/{author?}/{content?}', 'BlogController@update');
+Route::get('update/{id}/{title?}/{author?}/{content?}/{published?}', 'BlogController@update');
 
 
-Route::get('newblog/{title?}/{author?}/{content?}', [
+Route::get('newblog/{title?}/{author?}/{content?}/{published?}', [
     'as' => 'newblog', 'uses' => 'BlogController@create'
 ]);
 
