@@ -105,13 +105,142 @@ class Dog extends Animal {
  * 
  * Only one please
  * 
+ * To implement this I used the Singleto Desighn pattern
+ * https://en.wikipedia.org/wiki/Singleton_pattern
+ * 
+ * In the rest of our code to create a new ShopingCart
+ * we will call ShoppingCart::getInstance();
+ * 
+ * No mater how many times we will call "ShoppingCart::getInstance()"
+ * the same object will be retured
  * 
 **/
 class ShoppingCart {
+
+    private static $instance = null; // the one and only instance of ShoppingCart
     protected $items = array();
+
+    // private constructor so we prevent the initiation from any other part of our code
+    private function __construct() {
+
+    }
+
+    // the one-and-only ShoppingCart instance will be created from within the class itself
+    // if it hasn't been already
+    public static function getInstance()
+    {
+        if (self::$instance == null)
+            self::$instance = new ShoppingCart();
+
+        return self::$instance;
+    }
 
     public function addToCart($item)
     {
 
     }
 }
+
+
+
+/**
+ * 
+ * Hold the door
+ * 
+ * the use of modulo operator is a very standar way to find a numbers multiples
+ * 
+**/
+for($i = 1; $i <= 100; $i++) {    
+    
+    if ($i%3==0 && $i%5==0) {
+        echo  "HODOR";
+        echo "<br>";  
+    }
+    else if ($i % 3 == 0) {
+        echo  "HO";
+        echo "<br>";  
+    }
+    else if ($i % 5 == 0) {
+        echo  "DOR";
+        echo "<br>";  
+    }
+    else {
+        echo  $i;
+        echo "<br>";
+    }
+}
+
+
+/**
+ * 
+ * The lowercase is a lie
+ * 
+ * 
+**/
+$a = array(
+    'A' => 'abcd',
+    'B' => 'qwerty',
+    'C' => array(
+        'X' => 'aaaa',
+        'Y' => 'bbbb'
+    )
+);
+
+
+function makeUper(&$value, $key) // TIP! '&$value' we pass the variable by reference in the function so the function can realy modify it
+{
+    $value = strtoupper($value);
+}
+
+array_walk_recursive($a, 'makeUper');
+
+
+/**
+ * 
+ * Graceful replacement
+ * 
+ * 
+**/
+$colors = array('red', 'white', 'blue');
+
+echo "When the sun sets on the pristine ". $colors[1] ." beach it turns the ". $colors[2] ." ocean into a fury ". $colors[0] ." pool of lava.";
+
+
+
+/**
+ * 
+ * Palindrome
+ * 
+ * 
+**/
+function isPlaindrome($string) {
+    
+    //remove spaces
+    $string = str_replace(' ', '', $string);
+
+    //remove special characters
+    $string = preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+
+    //make all lowercase
+    $string = strtolower($string);
+
+    if (strrev($string) == $string) {   // compare with reversed string
+        echo("Is Palindrome!!!");
+    } 
+    else {
+        echo("not Palindrome...");
+    }
+}
+
+$string = "No 'x' in Nixon";
+isPlaindrome($string);
+
+
+/**
+ * 
+ * That one colleague
+ * 
+ * 
+**/
+// mysqldump -u mysqldump -u example -p employees > arisDump.sql
+
