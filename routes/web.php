@@ -15,22 +15,35 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('retrieve', 'BlogController@retrieve');
 
+// Blog API Routes
+Route::prefix('blogapi')->group(function () {  // we prefix that all the API URLs starts with /blogapi/...
 
-Route::get('init', 'BlogController@init');
-Route::get('blogs/{order?}/{published?}', 'BlogController@all');
-Route::get('blog/{id}', 'BlogController@blog');
-Route::get('delete/{id}', 'BlogController@delete');
-Route::get('update/{id}/{title?}/{author?}/{content?}/{published?}', 'BlogController@update');
+	// Initialize the Blog Application
+	Route::get('init', 'BlogController@init');  
+	//example: http://localhost:8000/blogapi/init 
+	
+	// create new Blog
+	Route::get('create/{title}/{author}/{content}/{published?}', [ 
+	    'as' => 'newblog', 'uses' => 'BlogController@create'
+	]);
+	//example: http://localhost:8000/blogapi/create/newTitle/someone/blablabla/true?sports&fashion
+	
+	// update a Blog by blogId
+	Route::get('update/{id}/{title}/{author}/{content}/{published?}', 'BlogController@update');
+	// example:  http://localhost:8000/blogapi/update/3/aaa/bbb/ccc/true?sports
 
+	// Delete a Blog by blogId
+	Route::get('delete/{id}', 'BlogController@delete');
+	// http://localhost:8000/blogapi/delete/2
 
-Route::get('newblog/{title?}/{author?}/{content?}/{published?}', [
-    'as' => 'newblog', 'uses' => 'BlogController@create'
-]);
+	// Get all Blogs  - We can apply many filters on this: check BlogController->allMethod or README file
+	Route::get('blogs/{order?}/{published?}', 'BlogController@all');
+	
+	// Get a Blog Object by its ID in json format
+	Route::get('blog/{id}', 'BlogController@blog')->name('blog.show'); // used to produce a link for the blog in the Email sent to Admin
 
-
-Route::get('flush', function () {
-    return Session::flush();    
+	// note: Laravel suggests for making APIs to use the routes/api.php file but there is not possible the use of Sessions)
 });
- 
+
+

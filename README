@@ -1,17 +1,170 @@
-for Initializing the application I used simple Composer framework commands. Specifically the "laravel new h1" command line tool which is a new feature of Laravel 5.5
-Otherwise equally easy we could use the:
-"composer create-project --prefer-dist laravel/laravel h1" command which also works for previous releases and is actually what "laravel" command sits on top
+
+*************
+*** Intro ***
+*************
+
+	PHP/Laravel:
+	To implement this assignment I used the Laravel php framework because it offers o lot of things out of the box and because I'm familiar with it.
+	The requirements of the project was not something complicated so also It could be done in pure object oriented PHP. 
+
+	MVC:
+	Laravel is based on the MVC architectural pattern so I sticked to it, without the 'V'-View part since we are talking about a headless CMS.
+
+	DataBase/Session:
+	Since you didn't requested a DataBase and also to make the project work for you out-of-the-box without the need of a Database setUp I chose to store the Blog App objects in the 'Session'. My other choice if again I didn't want to use a database would be to store things in .json files but the use of Files is usually my last option. In general in every descend project it is always better to use a database and also I have to note that with the objects stored in the Database, Laravel with the use of 'Eloquent' offers us many very interesting and helpful features like migration, database seeding, object relations, interesting queries, etc 
+	But in this case since the BlogAPI is more an MVP I'm using Session.
+
+	REST:
+	All Blog functionality (BlogAPI) is working with REST requests simply by hitting different URLs and passing variables where needed as URL vars
+	To all the requests I use the 'GET' http-verb because I like to be able to test/use the REST API out of the box, throw a Browser, throw Ajax or any other way just by hitting URLs and without having to Post Forms.
+	If we where talking for a more robust and stable project I would have use forms so also the other http-verbs like POST.
 
 
+******************************************
+*** Instructions to deploy the project ***
+******************************************
 
-sudo chmod -R 775 app/storage
-sudo chmod -R 775 bootstrap/cache
+Here you will find the simple steps needed to deploy and test my project. Note that to deploy you will need GIT and Composer
 
-php artisan serve
+	1) first of all clone the project
+		go to the directory you want to clone the project and run:
+	 
+		"git clone https://github.com/arischmod/h1.git"
+
+	2) "cd" into the new 'h1' folder and install the needed packages with composer
+
+		run: "composer update"   (this will take some time)
+
+	3) Change permissions of public folders
+		"sudo chmod -R 775 storage"
+		"sudo chmod -R 775 bootstrap/cache"
+
+	4) Copy the file '.env' that I sent attached to your email, under the 'h1' folder -> (../h1/.env)
+	This file contains sensitive information used like passwords or email credentials so the best practice is not to have it public on the Internet so it is added in the .gitignore file
+
+	5) Deploy the project using php artisan pseudo server so you don't have to set up a new Apache or Nginx instance
+
+		Go under the 'h1' git folder and run:  "php artisan serve"
+
+		(don't close this terminal window as log as you want the server to be up and running)
+
+	6) Now our project is Up and running
+		You can test this by visiting the location: 
+
+		"http://127.0.0.1:8000/" in your browser.
+
+		and you should see the Laravel starting page
+
+	7) Emails !!!
+	During the creation of a new Blog an Email is Sent to the Admin
+	To be able to test I added "rik@h1.nl" as admin email (this is declared in the .env file)
+	but mailGun service which I use to send email and for the email part to work out of the box 
+	
+	you should: Agree That you allow to receive email from MailGun Servers!
+	You can do this by accepting the invitation I sent you throw MailGun service.
+	If you haven't received it or you already deleted it inform me so I send it again. Thanx
 
 
-php artisan make:model Blog
+******************************************
+*** How to USE the BlogAPI / CheatShit ***
+******************************************
 
-BlogController.php
+	Init App:
+		http://localhost:8000/blogapi/init 		(adds dummy data - some initial Blogs)
+	Create New Blog:
+		http://localhost:8000/blogapi/create/newTitle/someone/blablabla/true?sports&fashion
+	Update Blog:
+		http://localhost:8000/blogapi/update/3/aaa/bbb/ccc/true?sports
+	Delete Blog:
+		http://localhost:8000/blogapi/delete/1
+	Retrieve All Blogs
+		http://localhost:8000/blogapi/blogs/desc
+		http://localhost:8000/blogapi/blogs/desc/pub
+		http://localhost:8000/blogapi/blogs/desc/pub?sports&fashion
 
-Routs /api
+
+*******************************************************
+*** Development Information / Testing Instructions  ***
+*******************************************************
+	   
+	In the code you will find many comments that indicate which line of code is doing what.
+	Also to the Browser you will use to test I hope you have a json beautifier plugIn so the json results from BlogAPI are in readable form. 
+
+	A Laravel project folder tree can be a little chaotic by the first look so I note out that the files that interest us and contain my code .
+	Important project Files:
+		/h1/routes/web.php 								// our Route file - contains all BlogAPI URLs
+		/h1/app/Http/Controllers/BlogController.php 	// our Controller - contains all methods and logic
+		/h1/app/Blog.php  								// our Model file - contains the Model (php Object) declaration
+
+	All the available BlogAPI URLs are declared in the routes/web.php file
+	and there it is declared to which method of the Controller we are redirected to each time
+
+
+	**Init**
+		First URL that we need to run is:
+			"http://localhost:8000/blogapi/init"
+		This initializes the APP and ads some fist dummy data in the project
+
+	**Create new Blog**
+		We can now start creating new Blogs with the command 'create'
+			"http://localhost:8000/blogapi/create/title/author/content/published?tag1&tag2&tag3"  
+		
+			- the 'title','author','content' are mandatory
+			- the 'published' takes True or False values and it can be empty (by default is false)
+		
+		example:  "http://localhost:8000/blogapi/create/newTitle/someone/blablabla/true?sports&fashion"
+
+
+	**Update Blog**
+		We can update a Blogs values with the command 'update' and the blogId
+			"http://localhost:8000/blogapi/update/blogId/title/author/content/published?tag1&tag2&tag3"  
+		
+			- the 'title','author','content' are mandatory
+			- the 'published' takes True or False values and it can be empty (by default is false)
+		
+		example:  "http://localhost:8000/blogapi/update/3/aaa/bbb/ccc/true?sports"
+
+
+	**Delete Blog**
+		We can delete a Blogs using it ID
+			"http://localhost:8000/blogapi/delete/blogId"  
+		
+		example:  "http://localhost:8000/blogapi/delete/2"
+
+
+	**Retrieve All Blogs**
+		This method we use to retrieve all the existing Blog posts as json objects
+		By default this will return all the Blogs, published and unpublished shorted by ascending order of publication Date
+			"http://localhost:8000/blogapi/blogs/order/publicationStatus"  
+
+		We can apply different filters on this
+		- to get the blogs in ASC/DESC order
+		- to get only the published ones 
+		- to get only the ones associated with a Tag
+		
+		example: "http://localhost:8000/blogapi/blogs"
+			will return all the blogs, first the published ones and at the end the unpublished ones (default)
+		
+		example: "http://localhost:8000/blogapi/blogs/asc"
+			will return all the blogs, first the published ones and at the end the unpublished ones
+			the published ones will be in ascending order based on the publication Date
+		
+		example: "http://localhost:8000/blogapi/blogs/desc"
+			will return all the blogs, first the published ones and at the end the unpublished ones
+			the published ones will be in DESCENDING order based on the publication Date
+
+		example: "http://localhost:8000/blogapi/blogs/asc/pub"
+			will return ONLY the published blogs in ascending order
+
+		example: "http://localhost:8000/blogapi/blogs/desc/pub"
+			will return ONLY the published blogs in descending order
+
+		example: "http://localhost:8000/blogapi/blogs?sports&fashion"
+			will return ONLY the Blogs that are associated with the tags 'sports' or 'fashion'
+
+		example: "http://localhost:8000/blogapi/blogs/desc/pub?sports&fashion"
+			will return ONLY the Blogs that are associated with the tags 'sports' or 'fashion'
+			also only the published blogs in descending order
+
+
+	
