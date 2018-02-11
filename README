@@ -11,13 +11,13 @@
 	Laravel is based on the MVC architectural pattern so I sticked to it, without the 'V'-View part since we are talking about a headless CMS.
 
 	DataBase/Session:
-	Since you didn't requested a DataBase and also to make the project work for you out-of-the-box without the need of a Database setUp I chose to store the Blog App objects in the 'Session'. My other choice if again I didn't want to use a database would be to store things in .json files but the use of Files is usually my last option. In general in every descend project it is always better to use a database and also I have to note that with the objects stored in the Database, Laravel with the use of 'Eloquent' offers us many very interesting and helpful features like migration, database seeding, object relations, interesting queries, etc 
+	Since you didn't requested a DataBase and also to make the project work for you out-of-the-box without the need of a Database setUp I chose to store the BlogApp objects in the 'Session'. My other choice if again I didn't want to use a database would be to store things in .json files but the use of Files is usually my last option. In general in every descend project it is always better to use a database and also I have to note that with the objects stored in the Database, Laravel with the use of 'Eloquent' offers us many very interesting and helpful features like migration, database seeding, object relations, interesting queries, etc 
 	But in this case since the BlogAPI is more an MVP I'm using Session.
 
 	REST:
 	All Blog functionality (BlogAPI) is working with REST requests simply by hitting different URLs and passing variables where needed as URL vars
 	To all the requests I use the 'GET' http-verb because I like to be able to test/use the REST API out of the box, throw a Browser, throw Ajax or any other way just by hitting URLs and without having to Post Forms.
-	If we where talking for a more robust and stable project I would have use forms so also the other http-verbs like POST.
+	If we where talking for a more robust and stable project I would have use forms so also other http-verbs like POST.
 
 
 ******************************************
@@ -56,11 +56,12 @@ Here you will find the simple steps needed to deploy and test my project. Note t
 		and you should see the Laravel starting page
 
 	7) Emails !!!
-	During the creation of a new Blog an Email is Sent to the Admin
+	During the creation of a new Blog an Email is Sent to the Admin as requested
 	To be able to test I added "rik@h1.nl" as admin email (this is declared in the .env file)
 	but mailGun service which I use to send email and for the email part to work out of the box 
 	
 	you should: Agree That you allow to receive email from MailGun Servers!
+	
 	You can do this by accepting the invitation I sent you throw MailGun service.
 	If you haven't received it or you already deleted it inform me so I send it again. Thanx
 
@@ -79,7 +80,7 @@ Here you will find the simple steps needed to deploy and test my project. Note t
 		http://localhost:8000/blogapi/delete/1
 	Retrieve All Blogs
 		http://localhost:8000/blogapi/blogs/desc
-		http://localhost:8000/blogapi/blogs/desc/pub
+		http://localhost:8000/blogapi/blogs/asc/pub
 		http://localhost:8000/blogapi/blogs/desc/pub?sports&fashion
 
 
@@ -90,11 +91,11 @@ Here you will find the simple steps needed to deploy and test my project. Note t
 	In the code you will find many comments that indicate which line of code is doing what.
 	Also to the Browser you will use to test I hope you have a json beautifier plugIn so the json results from BlogAPI are in readable form. 
 
-	A Laravel project folder tree can be a little chaotic by the first look so I note out that the files that interest us and contain my code .
+	A Laravel project folder tree can be a little chaotic by the first look so I note out that the files that interest us and contain my code.
 	Important project Files:
 		/h1/routes/web.php 								// our Route file - contains all BlogAPI URLs
 		/h1/app/Http/Controllers/BlogController.php 	// our Controller - contains all methods and logic
-		/h1/app/Blog.php  								// our Model file - contains the Model (php Object) declaration
+		/h1/app/Blog.php  								// our Model file - contains the Model (php Object declaration) 
 
 	All the available BlogAPI URLs are declared in the routes/web.php file
 	and there it is declared to which method of the Controller we are redirected to each time
@@ -103,11 +104,11 @@ Here you will find the simple steps needed to deploy and test my project. Note t
 	**Init**
 		First URL that we need to run is:
 			"http://localhost:8000/blogapi/init"
-		This initializes the APP and ads some fist dummy data in the project
+		This initializes the APP (clears previous Session) and ads some fist dummy data in the project
 
 	**Create new Blog**
 		We can now start creating new Blogs with the command 'create'
-			"http://localhost:8000/blogapi/create/title/author/content/published?tag1&tag2&tag3"  
+			"http://localhost:8000/blogapi/create/'title'/'author'/'content'/published?tag1&tag2&tag3"  
 		
 			- the 'title','author','content' are mandatory
 			- the 'published' takes True or False values and it can be empty (by default is false)
@@ -117,7 +118,7 @@ Here you will find the simple steps needed to deploy and test my project. Note t
 
 	**Update Blog**
 		We can update a Blogs values with the command 'update' and the blogId
-			"http://localhost:8000/blogapi/update/blogId/title/author/content/published?tag1&tag2&tag3"  
+			"http://localhost:8000/blogapi/update/blogId/'title'/'author'/'content'/published?tag1&tag2&tag3"  
 		
 			- the 'title','author','content' are mandatory
 			- the 'published' takes True or False values and it can be empty (by default is false)
@@ -133,9 +134,10 @@ Here you will find the simple steps needed to deploy and test my project. Note t
 
 
 	**Retrieve All Blogs**
-		This method we use to retrieve all the existing Blog posts as json objects
-		By default this will return all the Blogs, published and unpublished shorted by ascending order of publication Date
-			"http://localhost:8000/blogapi/blogs/order/publicationStatus"  
+		This method we use to retrieve all the existing Blog posts as an array of json objects
+		By default this will return all the Blogs, published and unpublished, shorted by ascending order of publication Date
+			
+			URL:	"http://localhost:8000/blogapi/blogs/order/publicationStatus?tag1&tag2"  
 
 		We can apply different filters on this
 		- to get the blogs in ASC/DESC order
